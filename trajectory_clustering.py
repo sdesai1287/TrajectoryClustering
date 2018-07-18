@@ -9,8 +9,8 @@ from trajectory import Trajectory
 from clustering import Clustering
 import sys
 
-canvas_width = 600
-canvas_height = 600
+canvas_width = 7000
+canvas_height = 900
 
 MAX_CLUSTERS = 3
 MAX_CLUSTERS_USER_DEFINED = False
@@ -42,6 +42,24 @@ newT = True # Flag - a new trajectory being created
 trajectories = []
 clust = Clustering()
 
+newDict = {}
+with open('/users/sunildesai/desktop/points.csv', 'r') as f:
+    for line in f:
+        data = line.split(',')
+        runID = data[0]
+        order = float (data[1])
+        xValue = float (data[2])
+        yValue = float (data[3])
+        if not newDict.has_key(runID):
+            newDict[runID] = []
+        newDict[runID].append((order, xValue, yValue))
+
+import pprint
+pprint.pprint(newDict)
+for key, value in sorted(newDict.iteritems(), key=lambda (k,v): (v,k)):
+    print "%s: %s" % (key, value)
+
+scale = 900
 # While mouse button 1 is pressed, the trajectory is being painted and new points are saved
 def buttonMotion(event):
     global newT, xold, yold
@@ -102,7 +120,7 @@ def clusterTrajectoriesAgglomerative(event):
     w.delete('all')
 
     #redraw background
-    w.create_image(300, 300, image=bg)
+    w.create_image(scale, 300, image=bg)
 
     # draw colored trajectories
     for t in trajectories:
@@ -119,7 +137,7 @@ def clusterTrajectoriesSpectral(event):
     w.delete('all')
 
     #redraw background
-    w.create_image(300, 300, image=bg)
+    w.create_image(scale, 300, image=bg)
 
     # draw colored trajectories
     for t in trajectories:
@@ -133,7 +151,7 @@ def reset(event):
     w.delete('all')
 
     #redraw background
-    w.create_image(300, 300, image=bg)
+    w.create_image(scale, 300, image=bg)
 
 # Command line parsing
 if(len(sys.argv) == 2):
@@ -149,7 +167,8 @@ master.title( "Trajectory clustering" )
 w = Canvas(master, width=canvas_width, height=canvas_height)
 w.pack(expand = YES, fill = BOTH)
 bg = PhotoImage(file='roundabout.gif')
-w.create_image(300, 300, image=bg)
+bg = bg.subsample(2)
+w.create_image(scale, 300, image=bg)
 w.focus_set()
 
 w.bind('<B1-Motion>', buttonMotion)
