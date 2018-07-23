@@ -1,6 +1,5 @@
 '''
 Created on 4. 5. 2015
-
 @author: janbednarik
 '''
 
@@ -8,6 +7,7 @@ from Tkinter import *
 from trajectory import Trajectory
 from clustering import Clustering
 import sys
+import numpy
 
 canvas_width = 7000
 canvas_height = 900
@@ -40,6 +40,7 @@ newT = True # Flag - a new trajectory being created
 
 # list of the clusters of trajectories
 trajectories = []
+pointsStorage = []
 clust = Clustering()
 
 newDict = {}
@@ -54,12 +55,37 @@ with open('/users/sunildesai/desktop/points.csv', 'r') as f:
             newDict[runID] = []
         newDict[runID].append((order, xValue, yValue))
 
-import pprint
-pprint.pprint(newDict)
-for key, value in sorted(newDict.iteritems(), key=lambda (k,v): (v,k)):
-    print "%s: %s" % (key, value)
+    for runID in newDict.keys():
+         newDict[runID] = sorted(newDict[runID])
 
-scale = 900
+    for order in newDict.keys():
+         newDict[order] = sorted(newDict[order])
+         
+    import pprint        
+    pprint.pprint(newDict)
+
+    for runID, order in newDict.iteritems():
+        pointsStorage.append(xValue)
+        pointsStorage.append(yValue)
+
+    n = 0
+    for n < pointStorage.count()
+        ## paint one point
+        #     c = COLORS[ci]
+        c = COLOR_BLACK
+        x1, y1 = (pointsStorage(n) - 2), (pointsStorage(n+1) - 2)
+        x2, y2 = (pointsStorage(n) + 2), (pointsStorage(n+1) + 2)
+        w.create_oval(x1, y1, x2, y2, fill = c)
+
+        ## paint a line
+        if xold is not None and yold is not None:
+        w.create_line(xTest, yTest, pointsStorage(n), pointsStorage(n+1), smooth=True)
+
+        xold = pointsStorage(n)
+        yold = pointsStorage(n+1)
+    
+
+scale = 800
 # While mouse button 1 is pressed, the trajectory is being painted and new points are saved
 def buttonMotion(event):
     global newT, xold, yold
@@ -103,9 +129,9 @@ def buttonUp(event):
     yold = None
 
     # Check if last trajectory has 0 length
-    if trajectories[len(trajectories) - 1].length() == 0.0:
-        trajectories.pop()
-        Trajectory.decGlobID()
+    #if trajectories[len(trajectories) - 1].length() == 0.0:
+#        trajectories.pop()
+#        Trajectory.decGlobID()
 
 # debug print trajectories
 def printTrajectories(event):
