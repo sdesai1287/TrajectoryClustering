@@ -40,7 +40,6 @@ newT = True # Flag - a new trajectory being created
 
 # list of the clusters of trajectories
 trajectories = []
-pointsStorage = []
 clust = Clustering()
 
 newDict = {}
@@ -64,26 +63,8 @@ with open('/users/sunildesai/desktop/points.csv', 'r') as f:
     import pprint        
     pprint.pprint(newDict)
 
-    for runID, order in newDict.iteritems():
-        pointsStorage.append(xValue)
-        pointsStorage.append(yValue)
 
-    n = 0
-    for n < pointStorage.count()
-        ## paint one point
-        #     c = COLORS[ci]
-        c = COLOR_BLACK
-        x1, y1 = (pointsStorage(n) - 2), (pointsStorage(n+1) - 2)
-        x2, y2 = (pointsStorage(n) + 2), (pointsStorage(n+1) + 2)
-        w.create_oval(x1, y1, x2, y2, fill = c)
 
-        ## paint a line
-        if xold is not None and yold is not None:
-        w.create_line(xTest, yTest, pointsStorage(n), pointsStorage(n+1), smooth=True)
-
-        xold = pointsStorage(n)
-        yold = pointsStorage(n+1)
-    
 
 scale = 800
 # While mouse button 1 is pressed, the trajectory is being painted and new points are saved
