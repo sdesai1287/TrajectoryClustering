@@ -42,27 +42,52 @@ newT = True # Flag - a new trajectory being created
 trajectories = []
 clust = Clustering()
 
-newDict = {}
-with open('/users/sunildesai/desktop/points.csv', 'r') as f:
-    for line in f:
-        data = line.split(',')
-        runID = data[0]
-        order = float (data[1])
-        xValue = float (data[2])
-        yValue = float (data[3])
-        if not newDict.has_key(runID):
-            newDict[runID] = []
-        newDict[runID].append((order, xValue, yValue))
 
-    for runID in newDict.keys():
-         newDict[runID] = sorted(newDict[runID])
 
-    for order in newDict.keys():
-         newDict[order] = sorted(newDict[order])
-         
-    import pprint        
+def loadPoints(w, trajectories):
+    newDict = {}
+    with open('/users/sunildesai/desktop/points.csv', 'r') as f:
+        for line in f:
+            data = line.split(',')
+            runID = data[0]
+            order = float (data[1])
+            xValue = float (data[2])
+            yValue = float (data[3])
+            if not newDict.has_key(runID):
+                newDict[runID] = []
+            newDict[runID].append((order, xValue, yValue))
+
+        for runID in newDict.keys():
+             newDict[runID] = sorted(newDict[runID])
+
+        for order in newDict.keys():
+             newDict[order] = sorted(newDict[order])
+             
+    import pprint
     pprint.pprint(newDict)
 
+    for runID, points in newDict.iteritems():
+        trajectories.append(Trajectory(0))
+        xold = None
+        yold = None
+        for order, xValue, yValue in points:
+            xValue = xValue * 10 + 200
+            yValue = 400 - (yValue * 10 + 100)
+            trajectories[len(trajectories) - 1].addPoint((xValue, yValue))
+
+            ## paint one point
+        #     c = COLORS[ci]
+            c = COLOR_BLACK
+            x1, y1 = (xValue - 2), (yValue - 2)
+            x2, y2 = (xValue + 2), (yValue + 2)
+            w.create_oval(x1, y1, x2, y2, fill = c)
+
+            ## paint a line
+            if xold is not None and yold is not None:
+                w.create_line(xold, yold, xValue, yValue, smooth=True)
+
+            xold = xValue
+            yold = yValue
 
 
 
@@ -184,5 +209,6 @@ w.bind('a', clusterTrajectoriesAgglomerative)
 w.bind('s', clusterTrajectoriesSpectral)
 w.bind('r', reset)
 
+loadPoints(w, trajectories)
 
 mainloop()
