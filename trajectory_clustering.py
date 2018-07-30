@@ -9,8 +9,13 @@ from clustering import Clustering
 import sys
 import numpy
 
-canvas_width = 7000
-canvas_height = 900
+#define the canvas size
+canvas_width = 945
+canvas_height = 285
+
+#shift the picture so it fills the canvas
+scaleX = 468
+scaleY = 145
 
 MAX_CLUSTERS = 3
 MAX_CLUSTERS_USER_DEFINED = False
@@ -71,8 +76,9 @@ def loadPoints(w, trajectories):
         xold = None
         yold = None
         for order, xValue, yValue in points:
-            xValue = xValue * 10 + 200
-            yValue = 400 - (yValue * 10 + 100)
+            #scale data
+            xValue = xValue * 9.2 + 150
+            yValue = 400 - (yValue * 10 + 200)
             trajectories[len(trajectories) - 1].addPoint((xValue, yValue))
 
             ## paint one point
@@ -89,9 +95,6 @@ def loadPoints(w, trajectories):
             xold = xValue
             yold = yValue
 
-
-
-scale = 800
 # While mouse button 1 is pressed, the trajectory is being painted and new points are saved
 def buttonMotion(event):
     global newT, xold, yold
@@ -152,7 +155,7 @@ def clusterTrajectoriesAgglomerative(event):
     w.delete('all')
 
     #redraw background
-    w.create_image(scale, 300, image=bg)
+    w.create_image(scaleX, scaleY, image=bg)
 
     # draw colored trajectories
     for t in trajectories:
@@ -169,7 +172,7 @@ def clusterTrajectoriesSpectral(event):
     w.delete('all')
 
     #redraw background
-    w.create_image(scale, 300, image=bg)
+    w.create_image(scaleX, scaleY, image=bg)
 
     # draw colored trajectories
     for t in trajectories:
@@ -183,7 +186,7 @@ def reset(event):
     w.delete('all')
 
     #redraw background
-    w.create_image(scale, 300, image=bg)
+    w.create_image(scaleX, scaleY, image=bg)
 
 # Command line parsing
 if(len(sys.argv) == 2):
@@ -200,7 +203,7 @@ w = Canvas(master, width=canvas_width, height=canvas_height)
 w.pack(expand = YES, fill = BOTH)
 bg = PhotoImage(file='roundabout.gif')
 bg = bg.subsample(2)
-w.create_image(scale, 300, image=bg)
+w.create_image(scaleX, scaleY, image=bg)
 w.focus_set()
 
 w.bind('<B1-Motion>', buttonMotion)
