@@ -138,9 +138,9 @@ def buttonUp(event):
     yold = None
 
     # Check if last trajectory has 0 length
-    #if trajectories[len(trajectories) - 1].length() == 0.0:
-#        trajectories.pop()
-#        Trajectory.decGlobID()
+    if trajectories[len(trajectories) - 1].length() == 0.0:
+        trajectories.pop()
+        Trajectory.decGlobID()
 
 # debug print trajectories
 def printTrajectories(event):
@@ -163,8 +163,8 @@ def clusterTrajectoriesAgglomerative(event):
 
 def clusterTrajectoriesSpectral(event):
     # perform clustering
-    #if MAX_CLUSTERS_USER_DEFINED:
-    #    clust.clusterSpectral(trajectories, MAX_CLUSTERS)
+    if MAX_CLUSTERS_USER_DEFINED:
+        clust.clusterSpectral(trajectories, MAX_CLUSTERS)
     #else:
     clust.clusterSpectral(trajectories)
      
