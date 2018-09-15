@@ -95,6 +95,26 @@ def loadPoints(w, trajectories):
             xold = xValue
             yold = yValue
 
+            # Check if last trajectory has 0 length
+        if trajectories[len(trajectories) - 1].length() == 0.0:
+            trajectories.pop()
+            Trajectory.decGlobID()
+
+def individualCluster(event, n):
+    print n
+    global w, trajectories
+    # clear canvas
+    w.delete('all')
+    w.create_image(scaleX, scaleY, image=bg)
+    for t in trajectories:
+        if (t.getClusterIdx() == n):
+            t.draw(w, COLORS[n])
+
+def individualClusterCallback(n):
+    return lambda evt: individualCluster(evt, n)
+
+
+
 # While mouse button 1 is pressed, the trajectory is being painted and new points are saved
 def buttonMotion(event):
     global newT, xold, yold
@@ -211,6 +231,10 @@ w.bind('<ButtonRelease-1>', buttonUp)
 w.bind('a', clusterTrajectoriesAgglomerative)
 w.bind('s', clusterTrajectoriesSpectral)
 w.bind('r', reset)
+
+for i in xrange(9):
+    s = str(i+1)
+    w.bind(s, individualClusterCallback(i))
 
 loadPoints(w, trajectories)
 
